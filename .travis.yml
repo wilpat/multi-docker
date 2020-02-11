@@ -6,7 +6,7 @@ services:
     - docker
 
 before_install:
-    - docker build -t wilpat/multi-docker -f Dockerfile.dev ./client #I want to test the react part only
+    - docker build -t wilpat/multi-docker -f ./client/Dockerfile.dev ./client #I want to test the react part only
 
 script:
     - docker run -e CI=true wilpat/multi-docker npm run test -- --coverage
