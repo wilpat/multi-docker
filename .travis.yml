@@ -17,7 +17,8 @@ after_success:
     - docker build -t wilpat/multi-server ./server
     - docker build -t wilpat/multi-worker ./worker
     # Log in to docker CLI using env vars in travis ci
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker login --username "$DOCKER_ID"  --password "$DOCKER_PASSWORD"
+    # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
     # Push the images to docker hub
     - docker push wilpat/multi-client
