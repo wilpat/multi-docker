@@ -1,0 +1,24 @@
+sudo: required
+language: generic
+services:
+    - docker
+
+before_install:
+    - docker build -t wilpat/multi-docker -f Dockerfile.dev ./client #I want to test the react part only
+
+script:
+    - docker run -e CI=true wilpat/multi-docker npm run test -- --coverage
+
+after_success:
+    docker build -t wilpat/multi-client ./client
+    docker build -t wilpat/multi-nginx ./nginx
+    docker build -t wilpat/multi-server ./server
+    docker build -t wilpat/multi-worker ./worker
+# Log in to docker CLI using env vars in travis ci
+- echo "$DOCKER_PASSWORD" | docker login -u "#DOCKER_ID" --password-stdin
+
+# Push the images to docker hub
+- docker push wilpat/multi-client
+- docker push wilpat/multi-nginx
+- docker push wilpat/multi-server
+- docker push wilpat/multi-worker
